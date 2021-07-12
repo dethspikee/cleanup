@@ -18,6 +18,11 @@ int main(int argc, char *argv[]) {
     struct dirent *dir;
     dir_ptr = opendir(argv[1]);
 
+    if (dir_ptr == NULL) {
+        perror("error opening dir");
+        return EXIT_FAILURE;
+    }
+
     while ((dir = readdir(dir_ptr)) != NULL) {
         if (dir->d_type == DT_DIR) {
             continue;
