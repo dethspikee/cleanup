@@ -7,21 +7,22 @@
 void clean_name(char *str);
 
 
-int main(void) {
+int main(int argc, char *argv[]) {
+
+    if (argc != 2) {
+        fprintf(stderr, "usage error. missing <path> argument\nusage: <path>\n");
+        return EXIT_FAILURE;
+    }
+
     DIR *dir_ptr;
     struct dirent *dir;
-    dir_ptr = opendir(".");
-    int counter = 0;
+    dir_ptr = opendir(argv[1]);
 
     while ((dir = readdir(dir_ptr)) != NULL) {
         if (dir->d_type == DT_DIR) {
             continue;
         }
         clean_name(dir->d_name);
-        counter++;
-        if (counter == 2) {
-            break;
-        }
     }
 
     return EXIT_FAILURE;
