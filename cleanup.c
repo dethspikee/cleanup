@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <dirent.h>
 
 
@@ -36,10 +37,18 @@ int main(int argc, char *argv[]) {
 
 void clean_name(char *str) {
     char temp_buffer[256];
-    char *ptr = temp_buffer;
-    strncpy(temp_buffer, str, strlen(str) + 1);
+    char *ptr = str;
+    int index = 0;
     while (*ptr) {
-        printf("%c", *ptr++);
+        if (isspace(*ptr)) {
+            temp_buffer[index++] = '_';
+            ptr++;
+            while (isspace(*ptr)) {
+                ptr++;
+            }
+        } else {
+            temp_buffer[index++] = *ptr++;
+        }
     }
-    printf("\n");
+    printf("%s\n", temp_buffer);
 }
