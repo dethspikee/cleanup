@@ -5,7 +5,7 @@
 #include <dirent.h>
 
 
-void clean_name(char *str);
+int clean_name(char *str, char *old_path);
 
 
 int main(int argc, char *argv[]) {
@@ -28,27 +28,43 @@ int main(int argc, char *argv[]) {
         if (dir->d_type == DT_DIR) {
             continue;
         }
-        clean_name(dir->d_name);
+        clean_name(dir->d_name, argv[1]);
     }
 
     return EXIT_FAILURE;
 }
 
 
-void clean_name(char *str) {
+int clean_name(char *str, char *old_path) {
     char temp_buffer[256];
-    char *ptr = str;
+    char *str_ptr;
+    char *path_ptr;
     int index = 0;
-    while (*ptr) {
-        if (isspace(*ptr)) {
+
+    str_ptr = str;
+    while (*str_ptr) {
+        if (isspace(*str_ptr)) {
             temp_buffer[index++] = '_';
-            ptr++;
-            while (isspace(*ptr)) {
-                ptr++;
+            str_ptr++;
+            while (isspace(*str_ptr)) {
+                str_ptr++;
             }
         } else {
-            temp_buffer[index++] = *ptr++;
+            temp_buffer[index++] = *str_ptr++;
         }
     }
-    printf("%s\n", temp_buffer);
+
+    path_ptr = malloc(strlen(old_path) + strlen(temp_buffer) + 1);
+    if (path_ptr == NULL) {
+        fprintf(stderr, "Error allocating memory.\n");
+        perror(NULL);
+        return EXIT_FAILURE;
+    }
+
+    strncpy(path_ptr, old_path, strlen(old_path) + 1);
+    strcat(path_ptr, temp_buffer);
+    printf("new path: %s\n", path_ptr);
+    free(path_ptr);
+
+    return EXIT_SUCCESS;
 }
