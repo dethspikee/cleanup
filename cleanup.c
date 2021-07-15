@@ -36,10 +36,10 @@ int main(int argc, char *argv[]) {
 
 
 int clean_name(char *str, char *old_path) {
+    int index = 0;
     char temp_buffer[256];
     char *str_ptr;
     char *path_ptr;
-    int index = 0;
 
     str_ptr = str;
     while (*str_ptr) {
