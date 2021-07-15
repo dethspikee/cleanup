@@ -9,7 +9,6 @@ int clean_name(char *str, char *old_path);
 
 
 int main(int argc, char *argv[]) {
-
     if (argc != 2) {
         fprintf(stderr, "usage error. missing <path> argument\nusage: <path>\n");
         return EXIT_FAILURE;
@@ -39,9 +38,15 @@ int clean_name(char *str, char *old_path) {
     int index = 0;
     char temp_buffer[256];
     char *str_ptr;
-    char *path_ptr;
+    char *real_path;
+
+    if ((real_path = realpath(old_path, NULL)) == NULL) {
+        perror("real path error");
+        return EXIT_FAILURE;
+    }
 
     str_ptr = str;
+    temp_buffer[index++] = '/';
     while (*str_ptr) {
         if (isspace(*str_ptr)) {
             temp_buffer[index++] = '_';
@@ -53,18 +58,13 @@ int clean_name(char *str, char *old_path) {
             temp_buffer[index++] = *str_ptr++;
         }
     }
+    temp_buffer[index] = '\0';
 
-    path_ptr = malloc(strlen(old_path) + strlen(temp_buffer) + 1);
-    if (path_ptr == NULL) {
-        fprintf(stderr, "Error allocating memory.\n");
-        perror(NULL);
-        return EXIT_FAILURE;
-    }
-
-    strncpy(path_ptr, old_path, strlen(old_path) + 1);
-    strcat(path_ptr, temp_buffer);
-    printf("new path: %s\n", path_ptr);
-    free(path_ptr);
+    char *testp = malloc(sizeof(temp_buffer) + sizeof(real_path));
+    strncpy(testp, real_path, strlen(real_path) + 1);
+    strcat(testp, temp_buffer);
+    printf("path: %s\n", testp);
+    free(testp);
 
     return EXIT_SUCCESS;
 }
