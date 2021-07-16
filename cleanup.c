@@ -60,11 +60,11 @@ int clean_name(char *str, char *old_path) {
     }
     temp_buffer[index] = '\0';
 
-    char *testp = malloc(sizeof(temp_buffer) + sizeof(real_path));
-    strncpy(testp, real_path, strlen(real_path) + 1);
-    strcat(testp, temp_buffer);
-    printf("path: %s\n", testp);
-    free(testp);
+    char *new_path = malloc(sizeof(temp_buffer) + sizeof(real_path));
+    strncpy(new_path, real_path, strlen(real_path) + 1);
+    strcat(new_path, temp_buffer);
+    printf("path: %s\n", new_path);
+    free(new_path);
 
     return EXIT_SUCCESS;
 }
