@@ -27,7 +27,9 @@ int main(int argc, char *argv[]) {
         if (dir->d_type == DT_DIR) {
             continue;
         }
-        clean_name(dir->d_name, argv[1]);
+        if (clean_name(dir->d_name, argv[1]) == EXIT_FAILURE) {
+            return EXIT_FAILURE;
+        }
     }
 
     return EXIT_FAILURE;
