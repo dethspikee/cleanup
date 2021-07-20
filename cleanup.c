@@ -5,7 +5,7 @@
 #include <dirent.h>
 
 
-int clean_name(char *str, char *old_path);
+int clean_name(char *str, char *path);
 
 
 int main(int argc, char *argv[]) {
@@ -34,13 +34,13 @@ int main(int argc, char *argv[]) {
 }
 
 
-int clean_name(char *str, char *old_path) {
+int clean_name(char *str, char *path) {
     int index = 0;
     char temp_buffer[256];
     char *str_ptr;
     char *real_path;
 
-    if ((real_path = realpath(old_path, NULL)) == NULL) {
+    if ((real_path = realpath(path, NULL)) == NULL) {
         perror("real path error");
         return EXIT_FAILURE;
     }
@@ -61,10 +61,20 @@ int clean_name(char *str, char *old_path) {
     temp_buffer[index] = '\0';
 
     char *new_path = malloc(sizeof(temp_buffer) + sizeof(real_path));
+    char *old_path = malloc(sizeof(temp_buffer) + sizeof(real_path));
+
     strncpy(new_path, real_path, strlen(real_path) + 1);
     strcat(new_path, temp_buffer);
-    printf("path: %s\n", new_path);
+    strncpy(old_path, real_path, strlen(real_path) + 1);
+    strcat(old_path, "/");
+    strcat(old_path, str);
+
+    if (rename(old_path, new_path) == -1) {
+        perror("rename error");
+    }
+
     free(new_path);
+    free(old_path);
 
     return EXIT_SUCCESS;
 }
