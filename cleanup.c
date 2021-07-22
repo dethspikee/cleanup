@@ -36,6 +36,11 @@ int main(int argc, char *argv[]) {
 }
 
 
+/*
+ * replace first whitespace character with '_' and remove
+ * remainig whitespace characters;
+ * then rename old file(s) using new name created.
+ */
 int clean_name(char *str, char *path) {
     int index = 0;
     char temp_buffer[256];
